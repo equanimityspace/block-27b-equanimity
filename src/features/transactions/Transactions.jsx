@@ -1,15 +1,18 @@
 import { useState } from "react";
-
-import { transfer } from "./transactionsSlice";
+import { useDispatch } from "react-redux";
+import { transfer, deposit, withdrawal } from "./transactionsSlice";
 import "./transactions.scss";
+import { useSelector } from "react-redux";
 
 /**
  * Allows users to deposit to, withdraw from, and transfer money from their account.
  */
 export default function Transactions() {
+  const dispatch = useDispatch();
   // TODO: Get the balance from the Redux store using the useSelector hook
-  const balance = 0;
-
+  // const balance = 0;
+  const balance = useSelector((state) => state.transactions.balance);
+  // console.log(balance);
   const [amountStr, setAmountStr] = useState("0.00");
   const [recipient, setRecipient] = useState("");
 
@@ -28,6 +31,16 @@ export default function Transactions() {
       // The `transfer` action is dispatched with a payload containing
       // the amount and the recipient.
       dispatch(transfer({ amount, recipient }));
+    }
+    if (action === "deposit") {
+      // The `transfer` action is dispatched with a payload containing
+      // the amount and the recipient.
+      dispatch(deposit({ amount, recipient }));
+    }
+    if (action === "withdraw") {
+      // The `transfer` action is dispatched with a payload containing
+      // the amount and the recipient.
+      dispatch(withdrawal({ amount, recipient }));
     }
   };
 
@@ -52,10 +65,12 @@ export default function Transactions() {
             />
           </label>
           <div>
-            <button default name="deposit">
+            <button default name="deposit" type="submit">
               Deposit
             </button>
-            <button name="withdraw">Withdraw</button>
+            <button name="withdraw" type="submit">
+              Withdraw
+            </button>
           </div>
         </div>
         <div className="form-row">
@@ -68,7 +83,9 @@ export default function Transactions() {
               onChange={(e) => setRecipient(e.target.value)}
             />
           </label>
-          <button name="transfer">Transfer</button>
+          <button name="transfer" type="submit">
+            Transfer
+          </button>
         </div>
       </form>
     </section>
